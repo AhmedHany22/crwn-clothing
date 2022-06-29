@@ -4,7 +4,7 @@ const Category = ({ category }) => (
   <div className="category-container">
     <div
       className="background-image"
-      style={{ backgroundImage: `${category.imageUrl}` }}
+      style={{ backgroundImage: `url(${category.imageUrl})` }}
     />
     <div className="category-body-container">
       <h2>{category.title}</h2>
