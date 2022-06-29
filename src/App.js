@@ -1,19 +1,18 @@
-import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 
-import Directory from "./Components/Directory";
+import Navbar from "./Routes/Navbar/index";
+import Home from "./Routes/Home";
+import Shop from "./Routes/Shop/index";
 
 const App = () => {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    fetch("./data.json")
-      .then((response) => response.json())
-      .then((data) => {
-        setCategories(data);
-      });
-  }, []);
-
-  return <Directory categories={categories} />;
+  return (
+    <Routes>
+      <Route to="/" element={<Navbar />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+      </Route>
+    </Routes>
+  );
 };
 
 export default App;
