@@ -1,18 +1,20 @@
+// ------------------------------ Import Section ------------------------------
 // imort the firebase collection of tools as "App"
 import { initializeApp } from "firebase/app";
 
 // import firestore methods : Get-> to create firestore instance, Doc-> to retrive docs
-// getDoc & setDoc to read & update the document data
+// getDoc & setDoc to operate the documents' data
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 // import the "Firebase Auth" library
 import {
   getAuth,
-  signinWithRedirect,
+  signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
 
+// ------------------------------ Configuration Section ------------------------------
 // Firebase "App" configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCR53Uq3QjMHiinLdkkswB_yIuIOQpCCFw" /*Not a secret */,
@@ -23,6 +25,7 @@ const firebaseConfig = {
   appId: "1:292727571717:web:5e4675d8a75fb6f7e0e36c",
 };
 
+// ------------------------------ Authentication Section ------------------------------
 // Initialize the Firebase instanse to control the CRUD operations
 const firebaseApp = initializeApp(firebaseConfig);
 
@@ -39,6 +42,11 @@ export const auth = getAuth();
 // Export Signing with Google-Popup function
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
+// Export Signing with Google-Redirect function
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, provider);
+
+// ------------------------------ Firestore DB Section ------------------------------
 // Initialize firestore DB
 export const db = getFirestore();
 
