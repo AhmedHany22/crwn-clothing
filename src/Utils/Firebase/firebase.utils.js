@@ -7,12 +7,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 // import the "Firebase Auth" library
-import {
-  getAuth,
-  signInWithRedirect,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 // ------------------------------ Configuration Section ------------------------------
 // Firebase "App" configuration
@@ -42,10 +37,6 @@ export const auth = getAuth();
 // Export Signing with Google-Popup function
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
-// Export Signing with Google-Redirect function
-export const signInWithGoogleRedirect = () =>
-  signInWithRedirect(auth, provider);
-
 // ------------------------------ Firestore DB Section ------------------------------
 // Initialize firestore DB
 export const db = getFirestore();
@@ -67,11 +58,7 @@ export const createUserDoc = async (userAuth) => {
     const createdAt = new Date();
 
     try {
-      await setDoc(userDocRef, {
-        displayName,
-        email,
-        createdAt,
-      });
+      await setDoc(userDocRef, { displayName, email, createdAt });
     } catch (e) {
       console.log(e);
     }
