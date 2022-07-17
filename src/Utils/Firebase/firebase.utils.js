@@ -7,7 +7,13 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 // import the "Firebase Auth" library
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 // ------------------------------ Configuration Section ------------------------------
 // Firebase "App" configuration
@@ -37,16 +43,26 @@ export const auth = getAuth();
 // Export Signing with Google-Popup function
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
+// Export Signing with Email & Password function
+export const signUpWithEmail = async (email, password) => {
+  if (!email || !password) return;
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+// Export Signing with Email & Password function
+export const signInWithEmail = async (email, password) => {
+  if (!email || !password) return;
+  return await signInWithEmailAndPassword(auth, email, password);
+};
+
 // ------------------------------ Firestore DB Section ------------------------------
 // Initialize firestore DB
 export const db = getFirestore();
 
 // Creating a user Document from "userAuthObj"
-export const createUserDoc = async (userAuth) => {
+export const createUserDoc = async (userAuth, addInfo = {}) => {
   // Creating a Doc ref with 3 prams [The DB, The collection name, A unique id]
   const userDocRef = doc(db, "users", userAuth.uid);
-
-  console.log(userDocRef);
 
   // Creating a snapshot from the DocRef to be able to test if it exists
   const userSnapshot = await getDoc(userDocRef);
@@ -58,7 +74,8 @@ export const createUserDoc = async (userAuth) => {
     const createdAt = new Date();
 
     try {
-      await setDoc(userDocRef, { displayName, email, createdAt });
+      // addInfo is empty obj that can be field with display name incease it didn't exist in the useAuth obj
+      await setDoc(userDocRef, { displayName, email, createdAt, ...addInfo });
     } catch (e) {
       console.log(e);
     }
