@@ -13,6 +13,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 
 // ------------------------------ Configuration Section ------------------------------
@@ -53,6 +54,11 @@ export const signUpWithEmail = async (email, password) => {
 export const signInWithEmail = async (email, password) => {
   if (!email || !password) return;
   return await signInWithEmailAndPassword(auth, email, password);
+};
+
+// Export Signing with Email & Password function
+export const signOutUser = async () => {
+  return await signOut(auth);
 };
 
 // ------------------------------ Firestore DB Section ------------------------------

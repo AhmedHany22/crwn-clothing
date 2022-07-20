@@ -1,13 +1,18 @@
-import React, { useState } from "react";
-import FormInput from "../FormInput";
 import "./SignIn.styles.scss";
+import { useContext, useState } from "react";
+
+import FormInput from "../FormInput";
 import Button from "./../Button/index";
-// In the firebase Database -> Enable Authentication -> Signin-method -> Add Provider -> Google
+
+import { UserContext } from "./../../Context/user.context";
+// In firebase DB -> Enable Authentication -> Signin-method -> Add Provider -> Google
 import {
   createUserDoc,
   signInWithEmail,
   signInWithGooglePopup,
 } from "../../Utils/Firebase/firebase.utils";
+
+//------------------------------ The Code ------------------------------
 
 const defaultFormFields = {
   email: "",
@@ -16,8 +21,9 @@ const defaultFormFields = {
 
 const SignIn = () => {
   const [formFields, setDefaultFormFields] = useState(defaultFormFields);
-
   const { email, password } = formFields;
+
+  const { setCurrentUser } = useContext(UserContext);
 
   // Handle input fields change
   const handleChange = ({ target }) => {
@@ -29,8 +35,8 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await signInWithEmail(email, password);
-      console.log(response);
+      const { user } = await signInWithEmail(email, password);
+      setCurrentUser(user);
     } catch (e) {
       if (e.code === "auth/wrong-password" || e.code === "auth/user-not-found")
         alert("Incorrect Password or Email");
@@ -40,7 +46,8 @@ const SignIn = () => {
   // Gitting the Respone of signing-in with Google-Popup
   const googleUser = async () => {
     const { user } = await signInWithGooglePopup();
-    await createUserDoc(user);
+    createUserDoc(user);
+    setCurrentUser(user);
   };
 
   return (
