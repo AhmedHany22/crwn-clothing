@@ -14,6 +14,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 // ------------------------------ Configuration Section ------------------------------
@@ -44,21 +45,26 @@ export const auth = getAuth();
 // Export Signing with Google-Popup function
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
-// Export Signing with Email & Password function
+// Export Signing In with Email & Password function
 export const signUpWithEmail = async (email, password) => {
   if (!email || !password) return;
   return await createUserWithEmailAndPassword(auth, email, password);
 };
 
-// Export Signing with Email & Password function
+// Export Signing In with Email & Password function
 export const signInWithEmail = async (email, password) => {
   if (!email || !password) return;
   return await signInWithEmailAndPassword(auth, email, password);
 };
 
-// Export Signing with Email & Password function
+// Export Signing Out function
 export const signOutUser = async () => {
   return await signOut(auth);
+};
+
+// Export Auth changing Listener function
+export const authChangeListener = (callback) => {
+  return onAuthStateChanged(auth, callback);
 };
 
 // ------------------------------ Firestore DB Section ------------------------------
@@ -72,7 +78,6 @@ export const createUserDoc = async (userAuth, addInfo = {}) => {
 
   // Creating a snapshot from the DocRef to be able to test if it exists
   const userSnapshot = await getDoc(userDocRef);
-  console.log(userSnapshot.exists());
 
   // If the user Doc doesn't exist then create new one
   if (!userSnapshot.exists()) {
@@ -83,7 +88,7 @@ export const createUserDoc = async (userAuth, addInfo = {}) => {
       // addInfo is empty obj that can be field with display name incease it didn't exist in the useAuth obj
       await setDoc(userDocRef, { displayName, email, createdAt, ...addInfo });
     } catch (e) {
-      console.log(e);
+      console.log("Creating user document encountered an error", e);
     }
   }
 

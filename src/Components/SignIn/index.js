@@ -1,29 +1,22 @@
 import "./SignIn.styles.scss";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import FormInput from "../FormInput";
 import Button from "./../Button/index";
 
-import { UserContext } from "./../../Context/user.context";
 // In firebase DB -> Enable Authentication -> Signin-method -> Add Provider -> Google
 import {
-  createUserDoc,
   signInWithEmail,
   signInWithGooglePopup,
 } from "../../Utils/Firebase/firebase.utils";
 
 //------------------------------ The Code ------------------------------
 
-const defaultFormFields = {
-  email: "",
-  password: "",
-};
+const defaultFormFields = { email: "", password: "" };
 
 const SignIn = () => {
   const [formFields, setDefaultFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
-
-  const { setCurrentUser } = useContext(UserContext);
 
   // Handle input fields change
   const handleChange = ({ target }) => {
@@ -35,20 +28,16 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { user } = await signInWithEmail(email, password);
-      setCurrentUser(user);
+      await signInWithEmail(email, password);
+      setDefaultFormFields(defaultFormFields);
     } catch (e) {
       if (e.code === "auth/wrong-password" || e.code === "auth/user-not-found")
-        alert("Incorrect Password or Email");
+        alert("Incorrect Email or Password");
     }
   };
 
-  // Gitting the Respone of signing-in with Google-Popup
-  const googleUser = async () => {
-    const { user } = await signInWithGooglePopup();
-    createUserDoc(user);
-    setCurrentUser(user);
-  };
+  // Signing-in with Google-Popup
+  const googleUser = async () => await signInWithGooglePopup();
 
   return (
     <div className="Sign-In-Container">

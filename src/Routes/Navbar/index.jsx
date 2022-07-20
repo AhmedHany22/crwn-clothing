@@ -6,11 +6,10 @@ import { UserContext } from "./../../Context/user.context";
 import { signOutUser } from "./../../Utils/Firebase/firebase.utils";
 
 const Navbar = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const signOutHandler = async () => {
     await signOutUser();
-    setCurrentUser(null);
   };
 
   return (

@@ -1,10 +1,9 @@
 import "./SignUp.sytles.scss";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
 import FormInput from "./../FormInput/index";
 import Button from "./../Button/index";
 
-import { UserContext } from "./../../Context/user.context";
 import {
   signUpWithEmail,
   createUserDoc,
@@ -23,8 +22,6 @@ const SignUp = () => {
   const [formFields, setDefaultFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
-  const { setCurrentUser } = useContext(UserContext);
-
   // Handle input fields change
   const handleChange = ({ target }) => {
     const { id, value } = target;
@@ -42,7 +39,6 @@ const SignUp = () => {
       const { user } = await signUpWithEmail(email, password);
       await createUserDoc(user, { displayName });
       setDefaultFormFields(defaultFormFields);
-      setCurrentUser(user);
     } catch (error) {
       if (error.code === "auth/email-already-in-use")
         alert("Email already exist");
