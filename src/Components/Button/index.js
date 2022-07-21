@@ -8,7 +8,7 @@ const Button = ({ children, btnType, ...others }) => {
       className={`button-container ${btnType ? BTN_TYPES[btnType] : ""}`}
       {...others}
     >
-      {children}
+      <span>{children}</span>
     </button>
   );
 };
