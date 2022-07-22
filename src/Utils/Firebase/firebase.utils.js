@@ -4,7 +4,14 @@ import { initializeApp } from "firebase/app";
 
 // import firestore methods : Get-> to create firestore instance, Doc-> to retrive docs
 // getDoc & setDoc to operate the documents' data
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+} from "firebase/firestore";
 
 // import the "Firebase Auth" library
 import {
@@ -18,6 +25,7 @@ import {
 } from "firebase/auth";
 
 // ------------------------------ Configuration Section ------------------------------
+
 // Firebase "App" configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCR53Uq3QjMHiinLdkkswB_yIuIOQpCCFw" /*Not a secret */,
@@ -68,8 +76,33 @@ export const authChangeListener = (callback) => {
 };
 
 // ------------------------------ Firestore DB Section ------------------------------
+
 // Initialize firestore DB
 export const db = getFirestore();
+
+// A function to create || add collections & documents
+export const addCollectionAndDocument = async (
+  collectionKey,
+  objetsToAdd,
+  field
+) => {
+  // Check if a the collection exists & ifn't create one
+  const collectionRef = collection(db, collectionKey);
+
+  // Allows us to attach a set of different writes, deletes, sets, and when we're ready to fire off the batch does the actual transaction begin.
+  const batch = writeBatch(db);
+
+  // Export
+  objetsToAdd.forEach((obj) => {
+    // It tells which DB we'll use - we add the field as param to make the func generic
+    const docRef = doc(collectionRef, obj[field].toLowerCase());
+    // Choose a location to set each Obj
+    batch.set(docRef, obj);
+  });
+  // Waiting for the async action to complete
+  await batch.commit();
+  console.log("Done");
+};
 
 // Creating a user Document from "userAuthObj"
 export const createUserDoc = async (userAuth, addInfo = {}) => {
