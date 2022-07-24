@@ -11,6 +11,8 @@ import {
   setDoc,
   collection,
   writeBatch,
+  query,
+  getDocs,
 } from "firebase/firestore";
 
 // import the "Firebase Auth" library
@@ -92,7 +94,7 @@ export const addCollectionAndDocument = async (
   // Allows us to attach a set of different writes, deletes, sets, and when we're ready to fire off the batch does the actual transaction begin.
   const batch = writeBatch(db);
 
-  // Export
+  // A loop for each Obj in the data we'll store
   objetsToAdd.forEach((obj) => {
     // It tells which DB we'll use - we add the field as param to make the func generic
     const docRef = doc(collectionRef, obj[field].toLowerCase());
@@ -102,6 +104,27 @@ export const addCollectionAndDocument = async (
   // Waiting for the async action to complete
   await batch.commit();
   console.log("Done");
+};
+
+// A function to get documents of "Categories"
+export const getCategoriesAndDocuments = async () => {
+  // Check if a the collection exists & ifn't create one
+  const collectionRef = collection(db, "categories");
+  // ---------------------
+  const q = query(collectionRef);
+
+  // Fetch the documents snapshot
+  const querySnapShot = await getDocs(q);
+
+  // Access an arrary of the different documents snapshoots
+  const categoryMap = querySnapShot.docs.reduce((accumlator, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    accumlator[title.toLowerCase()] = items;
+    return accumlator;
+  }, {});
+
+  // Return the DB in a form of OBJ
+  return categoryMap;
 };
 
 // Creating a user Document from "userAuthObj"
