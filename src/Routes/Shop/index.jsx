@@ -1,4 +1,3 @@
-import "./Shop.styles.scss";
 import { Routes, Route } from "react-router-dom";
 import Category from "../Category";
 import CategoriesPreview from "./../CategoriesPreview/index";

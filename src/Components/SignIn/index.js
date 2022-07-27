@@ -1,4 +1,4 @@
-import "./SignIn.styles.scss";
+import { SignInContainer, BtnContainer } from "./SignIn.styles";
 import { useState } from "react";
 
 import FormInput from "../FormInput";
@@ -40,7 +40,7 @@ const SignIn = () => {
   const googleUser = async () => await signInWithGooglePopup();
 
   return (
-    <div className="Sign-In-Container">
+    <SignInContainer>
       <h2>I already have an account</h2>
       <span>Sign in with your email and password</span>
       <form onSubmit={handleSubmit}>
@@ -58,14 +58,14 @@ const SignIn = () => {
           value={password}
           onChange={handleChange}
         />
-        <div className="btn-container">
+        <BtnContainer>
           <Button type="submit">SIGN IN</Button>
           <Button type="button" onClick={googleUser} btnType="google">
             GOOGLE SIGN IN
           </Button>
-        </div>
+        </BtnContainer>
       </form>
-    </div>
+    </SignInContainer>
   );
 };
 

@@ -1,50 +1,43 @@
-import "./Navbar.styles.scss";
-import { Outlet, Link } from "react-router-dom";
-import React, { useContext } from "react";
+import Styles from "./Navbar.styles.jsx";
+import { useContext, Fragment } from "react";
+import { Outlet } from "react-router-dom";
 import { ReactComponent as Crown } from "../../assets/crown.svg";
 import { UserContext } from "./../../Context/user.context";
+import { CartContext } from "./../../Context/cart.context";
 import { signOutUser } from "./../../Utils/Firebase/firebase.utils";
 import CartIcon from "../../Components/CartIcon";
 import CartDropDown from "../../Components/CartDropDown";
-import { CartContext } from "./../../Context/cart.context";
 
 const Navbar = () => {
   const { currentUser } = useContext(UserContext);
-
   const { isCartOpen } = useContext(CartContext);
 
-  const signOutHandler = async () => {
-    await signOutUser();
-  };
+  const signOutHandler = async () => await signOutUser();
 
   return (
-    <React.Fragment>
+    <Fragment>
       {/* Navegation Bar */}
-      <div className="navigation">
-        <Link to="/" className="logo-container">
-          <Crown className="logo" />
-        </Link>
-        <div className="nav-links-container">
+      <Styles.Navigation>
+        <Styles.LogoContainer to="/">
+          <Crown />
+        </Styles.LogoContainer>
+        <Styles.NavLinksContainer>
           {/* Routes Links */}
-          <Link to="/shop" className="nav-link">
-            Shop
-          </Link>
+          <Styles.NavLink to="/shop">Shop</Styles.NavLink>
           {currentUser ? (
-            <span className="nav-link" onClick={signOutHandler}>
+            <Styles.NavLink as="span" onClick={signOutHandler}>
               Sign Out
-            </span>
+            </Styles.NavLink>
           ) : (
-            <Link to="/auth" className="nav-link">
-              Sign In
-            </Link>
+            <Styles.NavLink to="/auth">Sign In</Styles.NavLink>
           )}
           <CartIcon />
-        </div>
+        </Styles.NavLinksContainer>
         {isCartOpen && <CartDropDown />}
-      </div>
+      </Styles.Navigation>
       {/* Pages Container */}
       <Outlet />
-    </React.Fragment>
+    </Fragment>
   );
 };
 

@@ -1,4 +1,4 @@
-import "./SignUp.sytles.scss";
+import { SignUpContainer } from "./SignUp.sytles";
 import { useState } from "react";
 
 import FormInput from "./../FormInput/index";
@@ -47,7 +47,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="Sign-Up-Container">
+    <SignUpContainer>
       <h2>Don't have an account?</h2>
       <span>Sign Up with Email and Password</span>
 
@@ -85,7 +85,7 @@ const SignUp = () => {
         />
         <Button type="submit">SIGN UP</Button>
       </form>
-    </div>
+    </SignUpContainer>
   );
 };
 

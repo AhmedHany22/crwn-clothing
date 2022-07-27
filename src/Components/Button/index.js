@@ -1,15 +1,18 @@
-import "./Button.styles.scss";
+import { BaseBtn, GoogleBtn, InvertedBtn } from "./Button.styles";
 
-const BTN_TYPES = { google: "google-sign-in", inverted: "inverted" };
+const BTN_TYPES = { base: BaseBtn, google: GoogleBtn, inverted: InvertedBtn };
+
+const getBtn = (btnType = "base") => BTN_TYPES[btnType];
 
 const Button = ({ children, btnType, ...others }) => {
+  const CustomBtn = getBtn(btnType);
   return (
-    <button
+    <CustomBtn
       className={`button-container ${btnType ? BTN_TYPES[btnType] : ""}`}
       {...others}
     >
       <span>{children}</span>
-    </button>
+    </CustomBtn>
   );
 };
 
