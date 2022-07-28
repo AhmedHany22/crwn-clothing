@@ -103,7 +103,6 @@ export const addCollectionAndDocument = async (
   });
   // Waiting for the async action to complete
   await batch.commit();
-  console.log("Done");
 };
 
 // A function to get documents of "Categories"

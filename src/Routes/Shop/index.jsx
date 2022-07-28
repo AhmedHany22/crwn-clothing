@@ -3,7 +3,6 @@ import Category from "../Category";
 import CategoriesPreview from "./../CategoriesPreview/index";
 
 const Shop = () => {
-  console.log("shop");
   return (
     <Routes>
       <Route index element={<CategoriesPreview />} />
