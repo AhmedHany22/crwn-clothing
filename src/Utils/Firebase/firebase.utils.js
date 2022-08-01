@@ -116,14 +116,8 @@ export const getCategoriesAndDocuments = async () => {
   const querySnapShot = await getDocs(q);
 
   // Access an arrary of the different documents snapshoots
-  const categoryMap = querySnapShot.docs.reduce((accumlator, docSnapshot) => {
-    const { title, items } = docSnapshot.data();
-    accumlator[title.toLowerCase()] = items;
-    return accumlator;
-  }, {});
-
   // Return the DB in a form of OBJ
-  return categoryMap;
+  return querySnapShot.docs.map((docSnapshot) => docSnapshot.data());
 };
 
 // Creating a user Document from "userAuthObj"
