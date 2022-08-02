@@ -1,20 +1,21 @@
 import Styles from "./Navbar.styles.jsx";
-import { useSelector } from "react-redux";
-import { useContext, Fragment } from "react";
-import { Outlet } from "react-router-dom";
 
-import { CartContext } from "./../../Context/cart.context";
-import { userSelector } from "./../../Store/User/user.selector";
-import { signOutUser } from "./../../Utils/Firebase/firebase.utils";
-import { ReactComponent as Crown } from "../../assets/crown.svg";
+import { Fragment } from "react";
+import { useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
 
 import CartIcon from "../../Components/CartIcon";
 import CartDropDown from "../../Components/CartDropDown";
+import { ReactComponent as Crown } from "../../assets/crown.svg";
+
+import { userSelector } from "./../../Store/User/user.selector";
+import { cartStateSelector } from "./../../Store/Cart/cart.selector";
+import { signOutUser } from "./../../Utils/Firebase/firebase.utils";
 
 const Navbar = () => {
-  const { isCartOpen } = useContext(CartContext);
   // ------------------------------ Fetching Redux data ------------------------------
   const currentUser = useSelector(userSelector);
+  const isCartOpen = useSelector(cartStateSelector);
 
   const signOutHandler = async () => await signOutUser();
 
