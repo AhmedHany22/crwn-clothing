@@ -10,8 +10,19 @@ import {
 import { rootReducer } from "./rootReducer";
 
 // Applying a middleware "Logger" to log every change on the redux state
-const middlewares = [logger];
-const composedEnhancers = compose(applyMiddleware(...middlewares));
+// Disabling the middleware "Logger" in production mode
+const middlewares = [process.env.Node_ENV !== "production" && logger].filter(
+  Boolean
+);
+
+// Enabling the REDUX_DEV tool in Non production mode
+const composeEnhancer =
+  (process.env.NODE_ENV !== "production" &&
+    window &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  compose;
+
+const composedEnhancers = composeEnhancer(applyMiddleware(...middlewares));
 
 // Applying persist library to save the redux state in Ram
 const persistConfig = { key: "root", storage, blacklist: ["user", "category"] };
