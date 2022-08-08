@@ -20,3 +20,8 @@ export const categorySelector = createSelector(
       return accumlator;
     }, {})
 );
+
+export const categoryIsLoadingSelector = createSelector(
+  selectCategoryReducerState,
+  (categorySlice) => categorySlice.isLoading
+);
