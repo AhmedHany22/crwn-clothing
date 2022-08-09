@@ -5,14 +5,14 @@ import { Routes, Route } from "react-router-dom";
 import Category from "../Category";
 import CategoriesPreview from "./../CategoriesPreview/index";
 
-import { fetchCategoriesAsync } from "../../Store/Category/category.action";
+import { fetchCategoriesStart } from "../../Store/Category/category.action";
 
 const Shop = () => {
   // The dispatch of action to the reducer
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchCategoriesAsync());
+    dispatch(fetchCategoriesStart());
   }, []);
 
   return (

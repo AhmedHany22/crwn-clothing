@@ -1,14 +1,13 @@
 import { SignInContainer, BtnContainer } from "./SignIn.styles";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import FormInput from "../FormInput";
 import Button from "./../Button/index";
-
-// In firebase DB -> Enable Authentication -> Signin-method -> Add Provider -> Google
 import {
-  signInWithEmail,
-  signInWithGooglePopup,
-} from "../../Utils/Firebase/firebase.utils";
+  emailSignInStart,
+  googleSignInStart,
+} from "./../../Store/User/user.action";
 
 //------------------------------ The Code ------------------------------
 
@@ -17,6 +16,8 @@ const defaultFormFields = { email: "", password: "" };
 const SignIn = () => {
   const [formFields, setDefaultFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
+
+  const dispatch = useDispatch();
 
   // Handle input fields change
   const handleChange = ({ target }) => {
@@ -28,7 +29,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmail(email, password);
+      dispatch(emailSignInStart(email, password));
       setDefaultFormFields(defaultFormFields);
     } catch (e) {
       if (e.code === "auth/wrong-password" || e.code === "auth/user-not-found")
@@ -37,7 +38,9 @@ const SignIn = () => {
   };
 
   // Signing-in with Google-Popup
-  const googleUser = async () => await signInWithGooglePopup();
+  const googleUser = async () => {
+    dispatch(googleSignInStart());
+  };
 
   return (
     <SignInContainer>

@@ -77,6 +77,23 @@ export const authChangeListener = (callback) => {
   return onAuthStateChanged(auth, callback);
 };
 
+// Export an promise func instead of the listener for the Redux_Saga
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        // Immediatly close the listener to prevent memory leak, or that listener'll be always active inside the file.
+        unsubscribe();
+        resolve(userAuth);
+      },
+      // The 3rd optional parameter of the func
+      // It's a callback that runs when an error is thrown during fetching the data
+      reject
+    );
+  });
+};
+
 // ------------------------------ Firestore DB Section ------------------------------
 
 // Initialize firestore DB
@@ -136,11 +153,10 @@ export const createUserDoc = async (userAuth, addInfo = {}) => {
     try {
       // addInfo is empty obj that can be field with display name incease it didn't exist in the useAuth obj
       await setDoc(userDocRef, { displayName, email, createdAt, ...addInfo });
-    } catch (e) {
-      console.log("Creating user document encountered an error", e);
-    }
+    } catch (e) {}
   }
 
-  // If the user Doc exists
-  return userDocRef;
+  // Changed to {userSnapshot} because its where does live
+  // The {userDocRef} is just a refrence of where the data live
+  return userSnapshot;
 };

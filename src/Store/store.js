@@ -1,7 +1,7 @@
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import logger from "redux-logger";
-import thunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
 import {
   compose,
   legacy_createStore as createStore,
@@ -9,12 +9,15 @@ import {
 } from "redux";
 
 import { rootReducer } from "./rootReducer";
+import { rootSaga } from "./rootSaga";
+
+const sagaMiddleware = createSagaMiddleware();
 
 // Applying a middleware "Logger" to log every change on the redux state
 // Disabling the middleware "Logger" in production mode
 const middlewares = [
   process.env.Node_ENV !== "production" && logger,
-  thunk,
+  sagaMiddleware,
 ].filter(Boolean);
 
 // Enabling the REDUX_DEV tool in Non production mode
@@ -36,6 +39,10 @@ export const store = createStore(
   undefined,
   composedEnhancers
 );
+
+// Strart the Saga generator functions
+sagaMiddleware.run(rootSaga);
+
 export const persistor = persistStore(store);
 
 export default store;
